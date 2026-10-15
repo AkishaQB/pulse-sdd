@@ -1,0 +1,21 @@
+/** Spec §5 error codes and their HTTP statuses. */
+export const ERROR_HTTP_STATUS = {
+  VALIDATION_ERROR: 400,
+  CAMPAIGN_NOT_FOUND: 404,
+  PAYLOAD_TOO_LARGE: 413,
+  UNSUPPORTED_MEDIA_TYPE: 415,
+  INVALID_STATUS_TRANSITION: 409,
+  VERSION_CONFLICT: 409,
+  SEGMENT_NOT_FOUND: 422,
+  IDEMPOTENCY_KEY_REUSED: 422,
+  SCHEDULED_AT_INVALID: 422,
+  PRECONDITION_REQUIRED: 428,
+  INTERNAL_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503,
+} as const;
+
+export type ErrorCode = keyof typeof ERROR_HTTP_STATUS;
+
+export interface ErrorBody {
+  error: { code: ErrorCode; message: string };
+}

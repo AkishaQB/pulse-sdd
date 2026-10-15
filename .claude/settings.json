@@ -1,4 +1,5 @@
 {
+  "model": "sonet",
   "permissions": {
     "allow": [
       "Bash(pnpm lint*)",

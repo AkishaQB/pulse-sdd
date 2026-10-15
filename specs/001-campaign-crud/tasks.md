@@ -12,7 +12,7 @@ One task = one session. Each task has its own check. Tick when done; note tokens
   - Covers: §6 data model (all ACs); AC-12, AC-14 indexes
   - Check: `pnpm db:migrate` on a fresh DB succeeds; `pnpm test:int -- migration` passes (tables, checks, FKs, indexes present)
   - Tokens:
-- [ ] **T3 – Shared DTOs, schemas, errors, events**
+- [x] **T3 – Shared DTOs, schemas, errors, events**
   - Files: `packages/shared/src/campaign.ts`, `errors.ts`, `events.ts`, `index.ts`, `campaign.test.ts`
   - Covers: AC-3a–e, AC-7, AC-15b–c, AC-17, AC-22, AC-23, AC-25 (schema level)
   - Check: `pnpm test -- packages/shared` passes
@@ -69,4 +69,4 @@ One task = one session. Each task has its own check. Tick when done; note tokens
   - Tokens:
 
 ## Notes / learnings
--
+- T3: Fastify's default Ajv has `removeAdditional: true`, which silently strips unknown properties. T4 must set `removeAdditional: false` so AC-3e/AC-25 return 400. Schema defaults (`tags: []` etc.) are not in the JSON schemas; the service and request-hash apply them.
