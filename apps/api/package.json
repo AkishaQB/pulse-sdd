@@ -7,6 +7,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@pulse/shared": "workspace:*",
+    "fastify": "^5.12.7",
     "pg": "^8.23.1"
   },
   "devDependencies": {

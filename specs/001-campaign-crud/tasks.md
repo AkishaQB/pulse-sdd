@@ -17,7 +17,7 @@ One task = one session. Each task has its own check. Tick when done; note tokens
   - Covers: AC-3a–e, AC-7, AC-15b–c, AC-17, AC-22, AC-23, AC-25 (schema level)
   - Check: `pnpm test -- packages/shared` passes
   - Tokens:
-- [ ] **T4 – API skeleton**
+- [x] **T4 – API skeleton**
   - Files: `apps/api/src/app.ts`, `errors.ts`, `container.ts`, `ports/clock.port.ts`, `db/pool.ts` (+ `app.test.ts`)
   - Covers: AC-3f, AC-38 (error mapping), AC-39 (error mapping)
   - Check: `pnpm test -- app` passes
@@ -70,3 +70,4 @@ One task = one session. Each task has its own check. Tick when done; note tokens
 
 ## Notes / learnings
 - T3: Fastify's default Ajv has `removeAdditional: true`, which silently strips unknown properties. T4 must set `removeAdditional: false` so AC-3e/AC-25 return 400. Schema defaults (`tags: []` etc.) are not in the JSON schemas; the service and request-hash apply them.
+- T4: Fastify ships a `text/plain` body parser, so AC-3f needed `removeContentTypeParser('text/plain')`. `buildApp({ register })` takes a route-registration hook; T12 wires the campaign routes through it from `container.ts`. `@pulse/shared` now has an `exports` entry so `apps/api` can import it.
