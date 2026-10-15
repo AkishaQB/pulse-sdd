@@ -22,12 +22,12 @@ One task = one session. Each task has its own check. Tick when done; note tokens
   - Covers: AC-3f, AC-38 (error mapping), AC-39 (error mapping)
   - Check: `pnpm test -- app` passes
   - Tokens:
-- [ ] **T5 – Ports and in-memory fakes**
+- [x] **T5 – Ports and in-memory fakes**
   - Files: `modules/campaigns/campaign.repository.ts`, `test/fakes/in-memory-campaign.repository.ts`, `in-memory-outbox.repository.ts`, `in-memory-idempotency.repository.ts`, `fake-unit-of-work.ts` + `fake-clock.ts`
   - Covers: test support for T7–T10
   - Check: `pnpm typecheck` passes
   - Tokens:
-- [ ] **T6 – Helpers: cursor, etag, request-hash**
+- [x] **T6 – Helpers: cursor, etag, request-hash**
   - Files: `modules/campaigns/cursor.ts`, `etag.ts`, `request-hash.ts` + tests
   - Covers: AC-12 (cursor round-trip at µs precision), AC-15a, AC-16, AC-17, AC-4/AC-5 (hash equality/difference)
   - Check: `pnpm test -- cursor etag request-hash` passes
@@ -71,3 +71,4 @@ One task = one session. Each task has its own check. Tick when done; note tokens
 ## Notes / learnings
 - T3: Fastify's default Ajv has `removeAdditional: true`, which silently strips unknown properties. T4 must set `removeAdditional: false` so AC-3e/AC-25 return 400. Schema defaults (`tags: []` etc.) are not in the JSON schemas; the service and request-hash apply them.
 - T4: Fastify ships a `text/plain` body parser, so AC-3f needed `removeContentTypeParser('text/plain')`. `buildApp({ register })` takes a route-registration hook; T12 wires the campaign routes through it from `container.ts`. `@pulse/shared` now has an `exports` entry so `apps/api` can import it.
+- T5: All four port interfaces (`CampaignRepository`, `OutboxRepository`, `IdempotencyRepository`, `UnitOfWork`) live in `campaign.repository.ts`, per plan.md. Non-transactional reads (GET, list) use `CampaignRepository` directly; writes go through `uow.run(tx => …)` with `tx.campaigns/outbox/idempotency`. `update()` always bumps `version` and `updatedAt`; the service passes only changed fields. `IdempotencyRepository.claim()` returns `{claimed:true}` or `{claimed:false, record}` (the live key). `list()` takes `limit` and `after: {createdAt, id}`; the service asks for `limit+1`. `FakeUnitOfWork` snapshots and restores all stores on throw (AC-39) but does not model locking. Fake campaign repo needs `addSegment(id)` before insert/update with that segment, and `seed()` for `sending`/`sent` rows.
