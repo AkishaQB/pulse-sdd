@@ -1,0 +1,27 @@
+{
+  "name": "pulse",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.13.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel --if-present dev",
+    "test": "vitest run --passWithNoTests --project unit",
+    "test:int": "vitest run --passWithNoTests --project int",
+    "lint": "eslint .",
+    "typecheck": "pnpm -r typecheck",
+    "db:migrate": "node-pg-migrate up --migrations-dir db/migrations --migrations-table pgmigrations"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@types/node": "^22.18.0",
+    "eslint": "^9.39.0",
+    "node-pg-migrate": "^9.0.0",
+    "pg": "^8.23.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.0",
+    "vitest": "^3.2.4"
+  }
+}

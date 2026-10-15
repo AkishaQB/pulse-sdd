@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm lint*)",
+      "Bash(pnpm typecheck*)",
+      "Bash(pnpm test*)",
+      "Bash(pnpm db:migrate*)"
+    ],
+    "deny": [
+      "Read(./node_modules/**)",
+      "Read(./**/dist/**)",
+      "Read(./**/*.lock)",
+      "Read(./pnpm-lock.yaml)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | grep -E '\\.(ts|tsx|js|json|md|sql)$' | xargs -r pnpm exec prettier --write --log-level warn"
+          }
+        ]
+      }
+    ]
+  }
+}

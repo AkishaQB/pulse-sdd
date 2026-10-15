@@ -1,0 +1,72 @@
+# 001 – Tasks
+
+One task = one session. Each task has its own check. Tick when done; note tokens from `/usage`.
+
+- [x] **T1 – Workspace scaffold**
+  - Files: `package.json`, `pnpm-workspace.yaml`, `tsconfig.base.json`, `vitest.config.ts`, `eslint.config.js` (+ minimal `package.json`/`tsconfig.json` for `apps/api`, `packages/shared`)
+  - Covers: infrastructure (no AC)
+  - Check: `pnpm install && pnpm lint && pnpm typecheck && pnpm test` passes (no tests yet, `--passWithNoTests`)
+  - Tokens:
+- [x] **T2 – Migration**
+  - Files: `db/migrations/001_campaigns.sql`, migrate config, `apps/api/test/int/migration.int.test.ts`
+  - Covers: §6 data model (all ACs); AC-12, AC-14 indexes
+  - Check: `pnpm db:migrate` on a fresh DB succeeds; `pnpm test:int -- migration` passes (tables, checks, FKs, indexes present)
+  - Tokens:
+- [ ] **T3 – Shared DTOs, schemas, errors, events**
+  - Files: `packages/shared/src/campaign.ts`, `errors.ts`, `events.ts`, `index.ts`, `campaign.test.ts`
+  - Covers: AC-3a–e, AC-7, AC-15b–c, AC-17, AC-22, AC-23, AC-25 (schema level)
+  - Check: `pnpm test -- packages/shared` passes
+  - Tokens:
+- [ ] **T4 – API skeleton**
+  - Files: `apps/api/src/app.ts`, `errors.ts`, `container.ts`, `ports/clock.port.ts`, `db/pool.ts` (+ `app.test.ts`)
+  - Covers: AC-3f, AC-38 (error mapping), AC-39 (error mapping)
+  - Check: `pnpm test -- app` passes
+  - Tokens:
+- [ ] **T5 – Ports and in-memory fakes**
+  - Files: `modules/campaigns/campaign.repository.ts`, `test/fakes/in-memory-campaign.repository.ts`, `in-memory-outbox.repository.ts`, `in-memory-idempotency.repository.ts`, `fake-unit-of-work.ts` + `fake-clock.ts`
+  - Covers: test support for T7–T10
+  - Check: `pnpm typecheck` passes
+  - Tokens:
+- [ ] **T6 – Helpers: cursor, etag, request-hash**
+  - Files: `modules/campaigns/cursor.ts`, `etag.ts`, `request-hash.ts` + tests
+  - Covers: AC-12 (cursor round-trip at µs precision), AC-15a, AC-16, AC-17, AC-4/AC-5 (hash equality/difference)
+  - Check: `pnpm test -- cursor etag request-hash` passes
+  - Tokens:
+- [ ] **T7 – Service tests: create / read / list (failing first)**
+  - Files: `modules/campaigns/campaign.service.create-read.test.ts`
+  - Covers: AC-1, AC-2, AC-4, AC-5, AC-9, AC-10, AC-11a, AC-13, AC-14
+  - Check: `pnpm test -- campaign.service.create-read` runs and fails only on missing implementation
+  - Tokens:
+- [ ] **T8 – Service: create / read / list**
+  - Files: `modules/campaigns/campaign.service.ts`
+  - Covers: AC-1, AC-2, AC-4, AC-5, AC-9, AC-10, AC-11a, AC-13, AC-14
+  - Check: `pnpm test -- campaign.service.create-read` passes
+  - Tokens:
+- [ ] **T9 – Service tests: write routes (failing first)**
+  - Files: `modules/campaigns/campaign.service.write.test.ts`
+  - Covers: AC-18–AC-24, AC-26, AC-29–AC-36
+  - Check: `pnpm test -- campaign.service.write` runs and fails only on missing implementation
+  - Tokens:
+- [ ] **T10 – Service: update / delete / schedule / cancel**
+  - Files: `modules/campaigns/campaign.service.ts`
+  - Covers: AC-18–AC-24, AC-26, AC-29–AC-36
+  - Check: `pnpm test -- campaign.service` passes
+  - Tokens:
+- [ ] **T11 – Postgres repositories and UnitOfWork**
+  - Files: `pg-campaign.repository.ts`, `pg-outbox.repository.ts`, `pg-idempotency.repository.ts`, `pg-unit-of-work.ts`, `test/int/repository.int.test.ts`
+  - Covers: AC-2/AC-26 (FK mapping), AC-6, AC-8, AC-12, AC-39
+  - Check: `pnpm test:int -- repository` passes
+  - Tokens:
+- [ ] **T12 – Routes and wiring**
+  - Files: `modules/campaigns/campaign.routes.ts`, `campaign.routes.test.ts`, `container.ts`, `app.ts`
+  - Covers: AC-1, AC-4, AC-6 (headers), AC-10, AC-11b, AC-16, AC-17, AC-21
+  - Check: `pnpm test -- routes` passes
+  - Tokens:
+- [ ] **T13 – End-to-end integration**
+  - Files: `test/int/campaigns.int.test.ts`, `test/int/helpers.ts`
+  - Covers: AC-6, AC-9, AC-27, AC-28, AC-37, AC-38, AC-39 (full stack)
+  - Check: `pnpm test:int -- campaigns` passes, and `pnpm lint && pnpm typecheck && pnpm test` passes
+  - Tokens:
+
+## Notes / learnings
+-
